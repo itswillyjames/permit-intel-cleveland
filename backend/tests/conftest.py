@@ -1,4 +1,7 @@
 import pytest
+import sys, os
+# Ensure the backend package is on the import path when running tests
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models.database import Base

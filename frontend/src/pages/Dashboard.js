@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../services/api';
 
 const Dashboard = () => {
   const [permits, setPermits] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/permits/')
+    apiClient.get('/api/permits/')
       .then(res => setPermits(res.data))
       .catch(err => console.error(err));
   }, []);

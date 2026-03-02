@@ -27,12 +27,12 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 def test_read_root():
-    response = client.get("/")
+    response = client.get("/api")
     assert response.status_code == 200
     assert "message" in response.json()
 
 def test_read_permits():
-    response = client.get("/permits/")
+    response = client.get("/api/permits/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
@@ -45,11 +45,11 @@ def test_ingest_permit():
         "status": "issued",
         "source_url": "https://example.com"
     }
-    response = client.post("/permits/ingest", json=payload)
+    response = client.post("/api/permits/ingest", json=payload)
     assert response.status_code == 200
     assert response.json()["permit_id"] == "TEST-001"
 
 def test_list_sources():
-    response = client.get("/sources/")
+    response = client.get("/api/sources/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)

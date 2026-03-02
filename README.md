@@ -65,13 +65,17 @@ README.md
    docker-compose up --build
    ```
 
-   This will launch PostgreSQL on port 5432, Redis on 6379, the backend API on 8000, and the frontend on 3000.
+   This will launch PostgreSQL on port 5432, Redis on 6379, the backend API on 8000, and the frontend on 3000 (backend serves a separate static frontend build when deployed).
+
+Note: the API endpoints are now mounted under `/api` to avoid conflicts with the single-page application. For example: `/api/permits/`.
 
 4. Initialize the database (alternatively run migrations with Alembic):
    ```bash
    docker-compose exec backend python -c "from app.models.database import engine, Base; Base.metadata.create_all(bind=engine)"
    ```
+### Production Deployment
 
+The backend image now incorporates a production build of the React frontend and exposes it at the root path (`/`). The API is available under `/api`. When deploying to Render or another platform, make sure you deploy only the backend service; static assets are served from the same container. Set `REACT_APP_API_BASE_URL` only if you need to override the default (which is `window.location.origin`).
 ### Running Without Docker
 
 ### Tests

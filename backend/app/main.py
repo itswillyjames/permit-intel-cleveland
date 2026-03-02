@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from .api import permits, sources, data_sources
 from .models.database import engine, Base
 
@@ -21,17 +23,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(permits.router, prefix="/permits", tags=["permits"])
-app.include_router(sources.router, prefix="/sources", tags=["sources"])
-app.include_router(data_sources.router, prefix="/data", tags=["data-fetching"])
+app.include_router(permits.router, prefix="/api/permits", tags=["permits"])
+app.include_router(sources.router, prefix="/api/sources", tags=["sources"])
+app.include_router(data_sources.router, prefix="/api/data", tags=["data-fetching"])
 
-@app.get("/")
-def root():
+@app.get("/api")
+def api_root():
     """API documentation and health check."""
     return {
         "message": "Permit Arbitrage Intelligence Hub API",
         "version": "1.0.0",
-        "docs": "/docs",
+        "docs": "/api/docs",
         "description": "Ingest permits → Score → Synthesize → Curate → Monetize",
         "features": [
             "Real data source integration (Socrata, ArcGIS)",
@@ -45,3 +47,9 @@ def root():
 def health_check():
     """Health check endpoint."""
     return {"status": "healthy", "service": "permit-intelligence-hub"}
+
+# Serve frontend static files - must be last so API routes take precedence
+frontend_build_path = Path(__file__).parent.parent / "frontend" / "build"
+if frontend_build_path.exists():
+    app.mount("/", StaticFiles(directory=str(frontend_build_path), html=True), name="static")
+
