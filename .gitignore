@@ -17,3 +17,4 @@ build/
 
 # virtualenv
 venv/
+backend/app/static/
