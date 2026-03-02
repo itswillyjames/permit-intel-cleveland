@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<title>Command Center</title>
+<link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+<h1>Command Center (Local CRM)</h1>
+<a href="/">← Back</a>
+<input id="name" placeholder="Buyer Name"/>
+<button onclick="save()">Add</button>
+<ul id="list"></ul>
+<script>
+const LS="permitintel.crm";
+function load(){
+  const d=JSON.parse(localStorage.getItem(LS)||"[]");
+  document.getElementById("list").innerHTML=d.map(x=>`<li>${x}</li>`).join("");
+}
+function save(){
+  const d=JSON.parse(localStorage.getItem(LS)||"[]");
+  d.push(document.getElementById("name").value);
+  localStorage.setItem(LS,JSON.stringify(d));
+  load();
+}
+load();
+</script>
+</body>
+</html>
