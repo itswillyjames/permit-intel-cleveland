@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+<title>Municipal Intelligence Command Center</title>
+<style>
+body{background:#0f172a;color:white;font-family:Arial;padding:20px}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{border:1px solid #334155;padding:8px}
+th{background:#1e293b}
+a{color:#38bdf8}
+.header{display:flex;justify-content:space-between;align-items:center}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>Municipal Intelligence — Cleveland</h1>
+<div>
+<a href="/export">Export Lead Sheet</a>
+</div>
+</div>
+
+<table id="t"></table>
+
+<script>
+fetch('/api/permits')
+.then(r=>r.json())
+.then(data=>{
+let t=document.getElementById("t");
+t.innerHTML="<tr><th>Permit</th><th>Owner</th><th>Address</th><th>Value</th><th>Assessed</th><th>Score</th><th>Deal Type</th></tr>";
+data.forEach(p=>{
+t.innerHTML+=`<tr>
+<td>${p.permit_id}</td>
+<td>${p.owner}</td>
+<td>${p.address}</td>
+<td>$${Number(p.value).toLocaleString()}</td>
+<td>${p.assessed_value || ""}</td>
+<td>${p.score}</td>
+<td>${p.deal_type}</td>
+</tr>`;
+});
+});
+</script>
+
+</body>
+</html>
