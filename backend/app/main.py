@@ -12,11 +12,9 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 def health():
     return {"status": "healthy"}
 
-# Serve static files
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
 
 @app.get("/{full_path:path}")
 async def serve_react_app(full_path: str):
     index_path = os.path.join(STATIC_DIR, "index.html")
     return FileResponse(index_path)
-
